@@ -14,6 +14,7 @@ class _FormPageState extends State<FormPage> {
 
   File file;
   double lat, lng;
+  bool imageBool = false;
 
   // method
 
@@ -113,6 +114,7 @@ class _FormPageState extends State<FormPage> {
     var imageObject = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
       file = imageObject;
+      imageBool = true;
     });
   }
 
@@ -133,6 +135,7 @@ class _FormPageState extends State<FormPage> {
     var imageObject = await ImagePicker.pickImage(source: ImageSource.gallery);
     setState(() {
       file = imageObject;
+      imageBool = true;
     });
   }
 
@@ -160,16 +163,65 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
+  Widget uploadValueButton() {
+    // return IconButton(
+    //   icon: Icon(Icons.cloud_upload),
+    //   onPressed: () {},
+    // );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        FloatingActionButton(
+          child: Icon(Icons.cloud_upload),
+          onPressed: () {
+            if (imageBool) {
+            } else {
+              myAlert(
+                  'No Choose Image', 'Please Choose Image From Camera/Gallery');
+            }
+          },
+        ),
+      ],
+    );
+  }
+
+  void myAlert(String title, String message) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),onPressed: (){
+                  Navigator.of(context).pop();
+                },
+              )
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
+      padding: EdgeInsets.only(
+        bottom: 50.0,
+        right: 10.0,
+        left: 10.0,
+      ),
       children: <Widget>[
         showImage(),
         showButton(),
         nameText(),
         detailText(),
+        SizedBox(
+          height: 10.0,
+        ),
         showLat(),
         showLng(),
+        uploadValueButton(),
       ],
     );
   }
