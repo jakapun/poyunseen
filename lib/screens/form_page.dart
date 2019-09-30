@@ -30,6 +30,7 @@ class _FormPageState extends State<FormPage> {
     var currentLocation = await findLocationData();
 
     if (currentLocation == null) {
+        myAlert('Location Error', 'Please Open GPS&Allow use Location');
     } else {
       setState(() {
         lat = currentLocation.latitude;
