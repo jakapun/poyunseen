@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:location/location.dart';
 
 class FormPage extends StatefulWidget {
   @override
@@ -12,8 +13,38 @@ class _FormPageState extends State<FormPage> {
   // explicit
 
   File file;
+  double lat, lng;
 
   // method
+
+  @override
+  void initState() {
+    super.initState();
+    findLatLng();
+  }
+
+  Future<void> findLatLng() async {
+    var currentLocation = await findLocationData();
+
+    if (currentLocation == null) {
+    } else {
+      setState(() {
+        lat = currentLocation.latitude;
+        lng = currentLocation.longitude;
+      });
+    }
+  }
+
+  Future<LocationData> findLocationData() async {
+    var location = Location();
+
+    try {
+      return await location.getLocation();
+    } catch (e) {
+      print('Error = $e');
+      return null;
+    }
+  }
 
   Widget nameText() {
     return Container(
@@ -105,6 +136,30 @@ class _FormPageState extends State<FormPage> {
     });
   }
 
+  Widget showLat() {
+    return Column(
+      children: <Widget>[
+        Text(
+          'Latitude',
+          style: TextStyle(fontSize: 20.0),
+        ),
+        Text('$lat')
+      ],
+    );
+  }
+
+  Widget showLng() {
+    return Column(
+      children: <Widget>[
+        Text(
+          'Longitude',
+          style: TextStyle(fontSize: 20.0),
+        ),
+        Text('$lng')
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -113,6 +168,8 @@ class _FormPageState extends State<FormPage> {
         showButton(),
         nameText(),
         detailText(),
+        showLat(),
+        showLng(),
       ],
     );
   }
