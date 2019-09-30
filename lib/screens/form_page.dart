@@ -15,6 +15,8 @@ class _FormPageState extends State<FormPage> {
   File file;
   double lat, lng;
   bool imageBool = false;
+  final formKey = GlobalKey<FormState>();
+  String name, detail;
 
   // method
 
@@ -56,7 +58,9 @@ class _FormPageState extends State<FormPage> {
           helperText: 'Text Your Display Name',
           hintText: 'English Only',
           icon: Icon(Icons.face),
-        ),
+        ),onSaved: (String value){
+          name = value.trim();
+        },
       ),
     );
   }
@@ -72,7 +76,9 @@ class _FormPageState extends State<FormPage> {
           helperText: 'Text Your Detail',
           hintText: 'English Only',
           icon: Icon(Icons.details),
-        ),
+        ),onSaved: (String value){
+          detail = value.trim();
+        },
       ),
     );
   }
@@ -175,6 +181,12 @@ class _FormPageState extends State<FormPage> {
           child: Icon(Icons.cloud_upload),
           onPressed: () {
             if (imageBool) {
+              formKey.currentState.save();
+              if ((name.isEmpty) || (detail.isEmpty) ) {
+                myAlert('Have Space', 'Please Fill Every Blank');           
+              } else {
+
+              }
             } else {
               myAlert(
                   'No Choose Image', 'Please Choose Image From Camera/Gallery');
@@ -205,24 +217,26 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      padding: EdgeInsets.only(
-        bottom: 50.0,
-        right: 10.0,
-        left: 10.0,
-      ),
-      children: <Widget>[
-        showImage(),
-        showButton(),
-        nameText(),
-        detailText(),
-        SizedBox(
-          height: 10.0,
+    return Form(key: formKey,
+          child: ListView(
+        padding: EdgeInsets.only(
+          bottom: 50.0,
+          right: 10.0,
+          left: 10.0,
         ),
-        showLat(),
-        showLng(),
-        uploadValueButton(),
-      ],
+        children: <Widget>[
+          showImage(),
+          showButton(),
+          nameText(),
+          detailText(),
+          SizedBox(
+            height: 10.0,
+          ),
+          showLat(),
+          showLng(),
+          uploadValueButton(),
+        ],
+      ),
     );
   }
 }
