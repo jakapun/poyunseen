@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
@@ -17,29 +18,28 @@ class _FormPageState extends State<FormPage> {
   double lat, lng;
   bool imageBool = false;
   final formKey = GlobalKey<FormState>();
-  String name, detail, code;
+  String name, detail, code, urlPicture;
 
   // method
 
   @override
-  void initState() { // เริ่มทำงานตรงนี้ก่อนที่อื่น
+  void initState() {
+    // เริ่มทำงานตรงนี้ก่อนที่อื่น
     super.initState();
     findLatLng();
     createCode();
   }
 
-  void createCode(){
-
+  void createCode() {
     int randInt = Random().nextInt(10000);
     code = 'code$randInt';
-
   }
 
   Future<void> findLatLng() async {
     var currentLocation = await findLocationData();
 
     if (currentLocation == null) {
-        myAlert('Location Error', 'Please Open GPS&Allow use Location');
+      myAlert('Location Error', 'Please Open GPS&Allow use Location');
     } else {
       setState(() {
         lat = currentLocation.latitude;
@@ -68,7 +68,8 @@ class _FormPageState extends State<FormPage> {
           helperText: 'Text Your Display Name',
           hintText: 'English Only',
           icon: Icon(Icons.face),
-        ),onSaved: (String value){
+        ),
+        onSaved: (String value) {
           name = value.trim();
         },
       ),
@@ -86,7 +87,8 @@ class _FormPageState extends State<FormPage> {
           helperText: 'Text Your Detail',
           hintText: 'English Only',
           icon: Icon(Icons.details),
-        ),onSaved: (String value){
+        ),
+        onSaved: (String value) {
           detail = value.trim();
         },
       ),
@@ -192,11 +194,13 @@ class _FormPageState extends State<FormPage> {
           onPressed: () {
             if (imageBool) {
               formKey.currentState.save();
-              if ((name.isEmpty) || (detail.isEmpty) ) {
-                myAlert('Have Space', 'Please Fill Every Blank');           
+              if ((name.isEmpty) || (detail.isEmpty)) {
+                myAlert('Have Space', 'Please Fill Every Blank');
               } else {
                 // check name,detail
-                print('name = $name, detail = $detail, lat = $lat, lng = $lng, code = $code');
+                print(
+                    'name = $name, detail = $detail, lat = $lat, lng = $lng, code = $code');
+                uploadFileToStorage();
               }
             } else {
               myAlert(
@@ -208,6 +212,25 @@ class _FormPageState extends State<FormPage> {
     );
   }
 
+  Future uploadFileToStorage() async {
+    String namePicture = '$code.jpg';
+
+    // create instance
+
+    FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+    StorageReference storageReference =
+        firebaseStorage.ref().child('Picture/$namePicture');
+    StorageUploadTask storageUploadTask = storageReference.putFile(file);
+
+    await (await storageUploadTask.onComplete)
+        .ref
+        .getDownloadURL()
+        .then((response) {
+          urlPicture = response;
+          print('urlPicture = $urlPicture');
+        });
+  }
+
   void myAlert(String title, String message) {
     showDialog(
         context: context,
@@ -217,7 +240,8 @@ class _FormPageState extends State<FormPage> {
             content: Text(message),
             actions: <Widget>[
               FlatButton(
-                child: Text('OK'),onPressed: (){
+                child: Text('OK'),
+                onPressed: () {
                   Navigator.of(context).pop();
                 },
               )
@@ -228,8 +252,9 @@ class _FormPageState extends State<FormPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(key: formKey,
-          child: ListView(
+    return Form(
+      key: formKey,
+      child: ListView(
         padding: EdgeInsets.only(
           bottom: 50.0,
           right: 10.0,
