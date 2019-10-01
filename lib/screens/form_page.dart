@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -226,8 +227,32 @@ class _FormPageState extends State<FormPage> {
         .ref
         .getDownloadURL()
         .then((response) {
-          urlPicture = response;
-          print('urlPicture = $urlPicture');
+      urlPicture = response;
+      print('urlPicture = $urlPicture');
+      updateValueToFireStore();
+    });
+  }
+
+  Future<void> updateValueToFireStore() async {
+    // create instance
+
+    Firestore firestore = Firestore.instance;
+
+    // <key, value>
+    Map<String, dynamic> map = Map();
+    map['Name'] = name;
+    map['Detail'] = detail;
+    map['Lat'] = lat;
+    map['Lng'] = lng;
+    map['Code'] = code;
+    map['UrlPicture'] = urlPicture;
+
+    await firestore
+        .collection('Unseen')
+        .document()
+        .setData(map)
+        .then((respond) {
+          print('upload success');
         });
   }
 
