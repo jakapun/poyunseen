@@ -131,7 +131,8 @@ class _FormPageState extends State<FormPage> {
 
   // thread
   Future<void> cameraThread() async {
-    var imageObject = await ImagePicker.pickImage(source: ImageSource.camera);
+    var imageObject = await ImagePicker.pickImage(
+        source: ImageSource.camera, maxWidth: 1200.0, maxHeight: 1200.0);
     setState(() {
       file = imageObject;
       imageBool = true;
