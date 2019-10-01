@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,14 +17,22 @@ class _FormPageState extends State<FormPage> {
   double lat, lng;
   bool imageBool = false;
   final formKey = GlobalKey<FormState>();
-  String name, detail;
+  String name, detail, code;
 
   // method
 
   @override
-  void initState() {
+  void initState() { // เริ่มทำงานตรงนี้ก่อนที่อื่น
     super.initState();
     findLatLng();
+    createCode();
+  }
+
+  void createCode(){
+
+    int randInt = Random().nextInt(10000);
+    code = 'code$randInt';
+
   }
 
   Future<void> findLatLng() async {
@@ -186,7 +195,8 @@ class _FormPageState extends State<FormPage> {
               if ((name.isEmpty) || (detail.isEmpty) ) {
                 myAlert('Have Space', 'Please Fill Every Blank');           
               } else {
-
+                // check name,detail
+                print('name = $name, detail = $detail, lat = $lat, lng = $lng, code = $code');
               }
             } else {
               myAlert(

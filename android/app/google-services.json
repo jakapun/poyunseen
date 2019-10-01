@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "529946956177",
+    "firebase_url": "https://poyunzeen.firebaseio.com",
+    "project_id": "poyunzeen",
+    "storage_bucket": "poyunzeen.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529946956177:android:83ca2e932cda41838f0a30",
+        "android_client_info": {
+          "package_name": "com.masterung.poyunseen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529946956177-jfdem3go2lmgs09p6cq4fo2qvp6drmvj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFFDH6RodKE0TW5L28V1CG_Qq6q41mCIw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "529946956177-jfdem3go2lmgs09p6cq4fo2qvp6drmvj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
