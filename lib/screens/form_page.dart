@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:location/location.dart';
+import 'package:poyunseen/screens/my_service.dart';
 
 class FormPage extends StatefulWidget {
   @override
@@ -252,8 +253,14 @@ class _FormPageState extends State<FormPage> {
         .document()
         .setData(map)
         .then((respond) {
-          print('upload success');
-        });
+      print('upload success');
+
+      // add instance
+      MaterialPageRoute materialPageRoute =
+          MaterialPageRoute(builder: (BuildContext context) => MyService());
+      Navigator.of(context).pushAndRemoveUntil(
+          materialPageRoute, (Route<dynamic> route) => false);
+    });
   }
 
   void myAlert(String title, String message) {
