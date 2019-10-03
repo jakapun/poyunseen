@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:poyunseen/screens/form_page.dart';
 import 'package:poyunseen/screens/listview_page.dart';
 import 'package:poyunseen/screens/my_home.dart';
+import 'package:poyunseen/screens/qr_reader.dart';
 
 class MyService extends StatefulWidget {
   @override
@@ -54,6 +55,25 @@ class _MyServiceState extends State<MyService> {
     ); // https://material.io/resources/icons/?style=baseline
   }
 
+  Widget menuQRcode() {
+    return ListTile(
+      leading: Icon(
+        Icons.android,
+        size: 36.0,
+        color: Colors.purple,
+      ),
+      title: Text(
+        'QR code Reader',
+        style: TextStyle(fontSize: 18.0),
+      ),onTap: (){
+        setState(() {
+          currentWidget = QRreader();
+          Navigator.of(context).pop();
+        });
+      },
+    );
+  }
+
   Widget showLogo() {
     return Container(
       width: 80.0,
@@ -96,6 +116,8 @@ class _MyServiceState extends State<MyService> {
           menuListViewPage(),
           Divider(),
           menuFormPage(),
+          Divider(),
+          menuQRcode(),
           Divider(),
         ],
       ),

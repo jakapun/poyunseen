@@ -29,6 +29,7 @@ dependencies:
   cloud_firestore: ^0.12.9+4
   google_maps_flutter: ^0.5.21+6
   imei_plugin: ^1.1.4
+  barcode_scan: ^1.0.0
 
 dev_dependencies:
   flutter_test:
