@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:poyunseen/screens/form_page.dart';
 import 'package:poyunseen/screens/listview_page.dart';
 import 'package:poyunseen/screens/my_home.dart';
 import 'package:poyunseen/screens/qr_reader.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MyService extends StatefulWidget {
   @override
@@ -11,8 +14,9 @@ class MyService extends StatefulWidget {
 
 class _MyServiceState extends State<MyService> {
   // explicit
-
-   Widget currentWidget = MyHomePage();
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  String nameString = '';
+  Widget currentWidget = MyHomePage();
   //Widget currentWidget = ListViewPage();
 
   // method
@@ -24,13 +28,15 @@ class _MyServiceState extends State<MyService> {
         size: 36.0,
         color: Colors.red,
       ),
-      title: Text('Form'),
-      subtitle: Text('Form Page for Input Value'),
+      title: Text(
+        'Form',
+        style: TextStyle(fontSize: 18.0),
+        ),
       // on tap == on click
       onTap: () {
         Navigator.of(context).pop();
         setState(() {
-         currentWidget = FormPage(); 
+          currentWidget = FormPage();
         });
       },
     ); // https://material.io/resources/icons/?style=baseline
@@ -43,13 +49,15 @@ class _MyServiceState extends State<MyService> {
         size: 36.0,
         color: Colors.purple,
       ),
-      title: Text('Listview'),
-      subtitle: Text('หน้าที่แสดงข้อมูล'),
+      title: Text(
+        'Listview',
+        style: TextStyle(fontSize: 18.0),
+        ),
       // on tap == on click
       onTap: () {
         Navigator.of(context).pop();
         setState(() {
-         currentWidget = ListViewPage(); 
+          currentWidget = ListViewPage();
         });
       },
     ); // https://material.io/resources/icons/?style=baseline
@@ -65,13 +73,37 @@ class _MyServiceState extends State<MyService> {
       title: Text(
         'QR code Reader',
         style: TextStyle(fontSize: 18.0),
-      ),onTap: (){
+      ),
+      onTap: () {
         setState(() {
           currentWidget = QRreader();
           Navigator.of(context).pop();
         });
       },
     );
+  }
+
+  Widget signOutAnExit() {
+    return ListTile(
+      leading: Icon(
+        Icons.exit_to_app,
+        size: 36.0,
+        color: Colors.red,
+      ),
+      title: Text(
+        'Sign Out & Exit',
+        style: TextStyle(fontSize: 18.0),
+      ),
+      onTap: () {
+        mySignOut();
+      },
+    );
+  }
+
+  Future<void> mySignOut() async {
+    await firebaseAuth.signOut().then((response) {
+      exit(0);
+    });
   }
 
   Widget showLogo() {
@@ -96,13 +128,13 @@ class _MyServiceState extends State<MyService> {
         children: <Widget>[
           showLogo(),
           Text(
-            'Poy Unseen',
+            'Poy Flutter',
             style: TextStyle(
-              fontSize: 20.0,
+              fontSize: 24.0,
               color: Colors.blue[900],
             ),
           ),
-          Text('share every thing from thailand'),
+          Text('Login by $nameString'),
         ],
       ),
     );
@@ -119,9 +151,24 @@ class _MyServiceState extends State<MyService> {
           Divider(),
           menuQRcode(),
           Divider(),
+          signOutAnExit(),
         ],
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    findDisplayName();
+  }
+
+  Future<void> findDisplayName() async {
+    FirebaseUser firebaseUser = await firebaseAuth.currentUser();
+    setState(() {
+      nameString = firebaseUser.email;
+    });
+    print('name = $nameString');
   }
 
   @override
@@ -130,7 +177,8 @@ class _MyServiceState extends State<MyService> {
       appBar: AppBar(
         title: Text('My Service'),
       ),
-      body: currentWidget, drawer: myDrawer(), // call drawer
+      body: currentWidget,
+      drawer: myDrawer(), // call drawer
     );
   }
 }
