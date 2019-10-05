@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:imei_plugin/imei_plugin.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -11,12 +12,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
+  FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  String nameString = '';
   String _platformImei = 'Unknown';
 
   @override
   void initState() {
     super.initState();
     initPlatformState();
+    findDisplayName();
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
@@ -39,6 +43,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<void> findDisplayName() async {
+    FirebaseUser firebaseUser = await firebaseAuth.currentUser();
+    setState(() {
+      nameString = firebaseUser.email;
+    });
+    print('name = $nameString');
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -47,7 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
         //   title: const Text('Plugin example app'),
         // ),
         body: Center(
-          child: Text('Running on: $_platformImei\n'),
+          // child: Text('Running on: $_platformImei\n'),
+          child: Text('Login by $nameString'),
         ),
       ),
     );
