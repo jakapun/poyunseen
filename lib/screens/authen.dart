@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:poyunseen/screens/my_service.dart';
 import 'package:poyunseen/screens/register.dart';
 
-
 class Authen extends StatefulWidget {
   @override
   _AuthenState createState() => _AuthenState();
@@ -21,6 +20,7 @@ class _AuthenState extends State<Authen> {
 
   @override
   void initState() {
+    // check status user ever login
     super.initState();
     checkStatus();
   }
@@ -28,6 +28,7 @@ class _AuthenState extends State<Authen> {
   Future<void> checkStatus() async {
     FirebaseUser firebaseUser = await firebaseAuth.currentUser();
     if (firebaseUser != null) {
+      // if not login in now
       moveToService();
     }
   }
@@ -56,7 +57,7 @@ class _AuthenState extends State<Authen> {
         style: TextStyle(color: Colors.blue.shade900),
       ),
       onPressed: () {
-        print('You Click SingUp');
+        print('You Click SignUp');
 
         // Create Route
         var registerRoute =
