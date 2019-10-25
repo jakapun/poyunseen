@@ -22,7 +22,7 @@ class _ListViewPageState extends State<ListViewPage> {
   Future<void> readDataFireStore() async {
     Firestore firestore = Firestore.instance;
     CollectionReference collectionReference = firestore.collection('Unseen');
-    await collectionReference.snapshots().listen((response) {
+    collectionReference.snapshots().listen((response) {
       List<DocumentSnapshot> snapshots = response.documents;
       for (var snapshot in snapshots) {
         // String name = snapshot.data['Name'];
