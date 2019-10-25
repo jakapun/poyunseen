@@ -59,8 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
         //   title: const Text('Plugin example app'),
         // ),
         body: Center(
-          // child: Text('Running on: $_platformImei\n'),
-          child: Text('Login by $nameString'),
+          child: Text('Running on: $_platformImei\n'),
+          // child: Text('Login by $nameString'),
         ),
       ),
     );

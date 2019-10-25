@@ -30,6 +30,8 @@ class _RegisterState extends State<Register> {
       validator: (String value) {
         if (value.isEmpty) {
           return 'Please Fill Name in Blank';
+        } else {
+            return null;
         }
       },
       onSaved: (String value) {
@@ -55,6 +57,8 @@ class _RegisterState extends State<Register> {
       validator: (String value) {
         if (!((value.contains('@')) && (value.contains('.')))) {
           return 'Type Email Format';
+        } else {
+            return null;
         }
       },
       onSaved: (String value) {
@@ -79,6 +83,8 @@ class _RegisterState extends State<Register> {
       validator: (String value) {
         if (value.length <= 5) {
           return 'Pass Much More 6 Charactor';
+        } else {
+            return null;
         }
       },
       onSaved: (String value) {
